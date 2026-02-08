@@ -1,27 +1,34 @@
 class Roleman < Formula
   desc "AWS SSO role selector that exports shell credentials"
   homepage "https://github.com/fiam/roleman"
-  version "0.1.0"
+  version "0.2.0"
   if OS.mac?
     if Hardware::CPU.arm?
-      url "https://github.com/fiam/roleman/releases/download/v0.1.0/roleman-aarch64-apple-darwin.tar.xz"
-      sha256 "a9c354e553b12d620bb11ca0f47faf354ff82d6afc2427e8759bf648e9abe6a9"
+      url "https://github.com/fiam/roleman/releases/download/v0.2.0/roleman-aarch64-apple-darwin.tar.xz"
+      sha256 "8db776b337fcc8e5ae0fd75def381ac7d6f4a0ab16f361e54c8cd38a0bb84a0f"
     end
     if Hardware::CPU.intel?
-      url "https://github.com/fiam/roleman/releases/download/v0.1.0/roleman-x86_64-apple-darwin.tar.xz"
-      sha256 "923256e4fee68691c95fd7a8826820e9d5b47867ba7542da890458029c8fe346"
+      url "https://github.com/fiam/roleman/releases/download/v0.2.0/roleman-x86_64-apple-darwin.tar.xz"
+      sha256 "f0c3720164692b0619fd32f37819fd83f48706ac0982637f2cdf9cfa759f710f"
     end
   end
-  if OS.linux? && Hardware::CPU.intel?
-      url "https://github.com/fiam/roleman/releases/download/v0.1.0/roleman-x86_64-unknown-linux-gnu.tar.xz"
-      sha256 "27a55df99f01990a69ef13d9468a95fd339688d944280fb4a2f41bb33a3d1680"
+  if OS.linux?
+    if Hardware::CPU.arm?
+      url "https://github.com/fiam/roleman/releases/download/v0.2.0/roleman-aarch64-unknown-linux-gnu.tar.xz"
+      sha256 "b5d88c83ddd4acf29f20d7e960b9114875ffaf62761ab1b94218c218feab78d6"
+    end
+    if Hardware::CPU.intel?
+      url "https://github.com/fiam/roleman/releases/download/v0.2.0/roleman-x86_64-unknown-linux-gnu.tar.xz"
+      sha256 "dd2b1c71565295e5d7e16c657d8deea328c3cb359018ff4f44bd150e98966e24"
+    end
   end
   license "MIT"
 
   BINARY_ALIASES = {
-    "aarch64-apple-darwin":     {},
-    "x86_64-apple-darwin":      {},
-    "x86_64-unknown-linux-gnu": {},
+    "aarch64-apple-darwin":      {},
+    "aarch64-unknown-linux-gnu": {},
+    "x86_64-apple-darwin":       {},
+    "x86_64-unknown-linux-gnu":  {},
   }.freeze
 
   def target_triple
@@ -42,6 +49,7 @@ class Roleman < Formula
   def install
     bin.install "roleman" if OS.mac? && Hardware::CPU.arm?
     bin.install "roleman" if OS.mac? && Hardware::CPU.intel?
+    bin.install "roleman" if OS.linux? && Hardware::CPU.arm?
     bin.install "roleman" if OS.linux? && Hardware::CPU.intel?
 
     install_binary_aliases!
